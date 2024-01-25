@@ -1,8 +1,8 @@
-from PyQt5.QtWidgets import QMainWindow, QStackedWidget, QWidget, QVBoxLayout, QDialog, QPushButton
-from copy_page import CopyPage
-from file_dialog import FileManagerWidget
-from menu_widget import MainMenuPage
-from delete_page import DeletePage
+from PyQt5.QtWidgets import QMainWindow, QStackedWidget, QWidget, QVBoxLayout, QDialog
+from src.Client.GUI.Pages.copy_page import CopyPage
+from src.Client.GUI.Pages.file_dialog import FileManagerWidget
+from src.Client.GUI.Pages.menu_widget import MainMenuPage
+from src.Client.GUI.Pages.delete_page import DeletePage
 class ClientGUI(QMainWindow):
     def __init__(self):
         super().__init__()

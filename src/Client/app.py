@@ -1,7 +1,7 @@
 import sys
 
 from PyQt5.QtWidgets import QApplication
-from main_window import ClientGUI
+from src.Client.GUI.main_window import ClientGUI
 
 class FileExplorerApp():
     def __init__(self):
