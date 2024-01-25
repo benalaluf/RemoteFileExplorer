@@ -1,6 +1,7 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QDialog
-from src.Client.GUI.Pages.file_dialog import FileManagerWidget
+from src.Client.GUI.Pages.file_dialog import FileManagerWidget, open_file_dialog
+
 
 class CopyPage(QWidget):
     def __init__(self, parent):
@@ -49,27 +50,16 @@ class CopyPage(QWidget):
 
         layout.addWidget(self.copy_button)
 
-
     def set_src_path(self):
-        self.src_path = self.open_file_dialog()
+        self.src_path = open_file_dialog()
         print(self.src_path)
         self.src_lable_path.setText(self.src_path)
 
     def set_dst_path(self):
-        self.dst_path = self.open_file_dialog()
+        self.dst_path = open_file_dialog()
         print(self.dst_path)
         self.dst_lable_path.setText(self.dst_path)
 
     def copy(self):
         print(f"copying {self.src_path} to {self.dst_path}")
         self.parent.show_menu_page()
-    def open_file_dialog(self):
-        popup = FileManagerWidget(self)
-        result = popup.exec_()
-
-        if result == QDialog.Accepted:
-            value = popup.get_result()
-            # print("Value from pop-up window:", value)
-            return value
-        return None
-

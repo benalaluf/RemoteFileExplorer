@@ -8,9 +8,8 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QPushButton,
 
 
 class FileManagerWidget(QDialog):
-    def __init__(self, parent):
+    def __init__(self):
         super(FileManagerWidget, self).__init__()
-        self.parent = parent
 
         self.setWindowTitle('File Manager')
         self.setGeometry(100, 100, 500, 400)
@@ -80,9 +79,13 @@ class FileManagerWidget(QDialog):
             self.path_label.setText(self.current_path)
         print(self.current_path)
 
+def open_file_dialog():
+    popup = FileManagerWidget()
+    result = popup.exec_()
 
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    file_manager = FileManagerWidget()
-    file_manager.show()
-    sys.exit(app.exec_())
+    if result == QDialog.Accepted:
+        value = popup.get_result()
+        # print("Value from pop-up window:", value)
+        return value
+    return None
+

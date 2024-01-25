@@ -3,13 +3,14 @@ from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayo
 from file_dialog import FileManagerWidget
 
 
-class DeletePage(QWidget):
+class CreatePage(QWidget):
     def __init__(self, parent):
         super().__init__()
         self.parent = parent
         self.initUI()
 
         self.src_path = ''
+        self.new_name = ''
 
     def initUI(self):
         layout = QVBoxLayout()
@@ -34,17 +35,19 @@ class DeletePage(QWidget):
 
         layout.addLayout(src_layout)
 
-        src_layout = QHBoxLayout()
-        self.src_lable = QLabel("src:")
-        self.src_lable_path = QLineEdit("None")
-        self.src_button = QPushButton("Choose")
-        self.src_button.clicked.connect(self.set_src_path)
-        src_layout.addWidget(self.src_lable)
-        src_layout.addWidget(self.src_lable_path)
-        src_layout.addWidget(self.src_button)
+        new_text_layout = QHBoxLayout()
+        self.new_name_lable = QLabel("Enter the name of the item:")
+        self.new_name_text = QLineEdit()
+        self.new_name_text.setPlaceholderText("write file name")
+        new_text_layout.addWidget(self.new_name_lable)
+        new_text_layout.addWidget(self.new_name_text)
+
+        layout.addLayout(new_text_layout)
 
         self.copy_button = QPushButton("Create")
-        self.copy_button.clicked.connect(self.delete)
+        self.copy_button.clicked.connect(self.create)
+        self.copy_button.clicked.connect(self.set_new_name)
+
 
         layout.addWidget(self.copy_button)
 
@@ -54,13 +57,13 @@ class DeletePage(QWidget):
         print(self.src_path)
         self.src_lable_path.setText(self.src_path)
 
-    def set_dst_path(self):
-        self.dst_path = self.open_file_dialog()
-        print(self.dst_path)
-        self.dst_lable_path.setText(self.dst_path)
+    def set_new_name(self):
+        self.new_name = self.new_name_text.text()
+        print(self.new_name)
+        
 
-    def delete(self):
-        print(f"Deleting {self.src_path}")
+    def create(self):
+        print(f"create {self.new_name}")
         self.parent.show_menu_page()
 
 

@@ -1,8 +1,11 @@
-from PyQt5.QtWidgets import QMainWindow, QStackedWidget, QWidget, QVBoxLayout, QDialog
+from PyQt5.QtWidgets import QMainWindow, QStackedWidget, QWidget, QVBoxLayout, QDialog, QPushButton
+
 from src.Client.GUI.Pages.copy_page import CopyPage
-from src.Client.GUI.Pages.file_dialog import FileManagerWidget
-from src.Client.GUI.Pages.menu_widget import MainMenuPage
+from src.Client.GUI.Pages.create_page import CreatePage
 from src.Client.GUI.Pages.delete_page import DeletePage
+from src.Client.GUI.Pages.menu_widget import MainMenuPage
+
+
 class ClientGUI(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -10,6 +13,7 @@ class ClientGUI(QMainWindow):
         self.menu_page = MainMenuPage(self)
         self.copy_page = CopyPage(self)
         self.delete_page = DeletePage(self)
+        self.create_page = CreatePage(self)
         self.init_gui()
 
     def init_gui(self):
@@ -27,6 +31,7 @@ class ClientGUI(QMainWindow):
         self.stacked_widget.addWidget(self.menu_page)
         self.stacked_widget.addWidget(self.copy_page)
         self.stacked_widget.addWidget(self.delete_page)
+        self.stacked_widget.addWidget(self.create_page)
 
     def show_copy_page(self):
         self.stacked_widget.setCurrentWidget(self.copy_page)
@@ -36,6 +41,9 @@ class ClientGUI(QMainWindow):
 
     def show_delete_page(self):
         self.stacked_widget.setCurrentWidget(self.delete_page)
+
+    def show_create_page(self):
+        self.stacked_widget.setCurrentWidget(self.create_page)
 
 
     def closeEvent(self, event):
