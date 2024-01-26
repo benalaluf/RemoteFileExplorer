@@ -37,7 +37,7 @@ class ServerConn:
             self.handel_packet(packet)
 
     def handel_packet(self, packet: Packet):
-        print(packet.payload)
+        print(packet.payload.decode())
         if packet.packet_type == PacketType.COPY:
             self.handle_copy(packet)
         if packet.packet_type == PacketType.DELETE:
@@ -50,20 +50,26 @@ class ServerConn:
             self.handle_lsdir(packet)
 
     def handle_copy(self, packet):
-        packet_data = json.loads(packet.payload.decode())
-        print(packet_data.get('src'), packet_data.get('dst'))
+        json_issue = packet.payload.decode().replace("\\","\\\\")
+        packet_data = json.loads(json_issue)
+        print('copying',packet_data.get('src'), packet_data.get('dst'))
+        # shutil.copy(packet_data.get('src'), packet_data.get('dst'))
 
 
     def handle_delete(self, packet):
         packet_data = json.load(packet.payload)
-        os.remove(packet_data.path)
+        print('deleting', packet_data.get('path'))
+        # os.remove(packet_data.path)
 
     def handle_create(self, packet):
         packet_data = json.loads(packet.payload)
-        os.mkdir(packet_data['path'], packet_data['name'])
+        print('creating',packet_data['path'], packet_data['filename'])
+        # os.mkdir(packet_data['path'], packet_data['filename'])
 
     def handle_open(self, packet):
-        pass
+        packet_data = json.loads(packet.payload)
+        print(packet_data['path'])
+        # os.startfile(packet_data['path'])
 
     def handle_lsdir(self, packet):
         pass

@@ -35,10 +35,10 @@ class DeletePage(QWidget):
 
         layout.addLayout(src_layout)
 
-        self.copy_button = QPushButton("Delete")
-        self.copy_button.clicked.connect(self.delete)
+        self.delete_button = QPushButton("Delete")
+        self.delete_button.clicked.connect(self.delete)
 
-        layout.addWidget(self.copy_button)
+        layout.addWidget(self.delete_button)
 
 
     def set_src_path(self):

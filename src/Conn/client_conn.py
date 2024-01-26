@@ -11,16 +11,17 @@ class ClientConn:
 
     def __init__(self, ip: str, port: int):
         self.server_addr = (ip, port)
+        print('server addr',self.server_addr)
         self.handle_packet_expansion = None
         self.client = socket(AF_INET, SOCK_STREAM)
 
     def main(self):
         self.connect_to_server()
         threading.Thread(target=self.receive).start()
-        self.send_test()
 
     def connect_to_server(self):
         try:
+            print("trying to connect")
             self.client.connect(self.server_addr)
             print(f'CONNECTED {self.server_addr}')
         except Exception as e:
@@ -28,11 +29,29 @@ class ClientConn:
             self.client.close()
             exit(1)
 
-    def send_test(self):
+    def copy(self, src, dst):
         print('sending')
-        data = '{"src": "nigga", "dst": "hello"}'
-        packet = Packet(PacketType.COPY,data.encode())
-        SendPacket.send_packet(self.client,packet)
+        data = f'{{"src": "{src}", "dst": "{dst}"}}'
+        packet = Packet(PacketType.COPY, data.encode())
+        SendPacket.send_packet(self.client, packet)
+
+    def delete(self, path):
+        print('sending')
+        data = f'{{"path": "{path}"}}'
+        packet = Packet(PacketType.DELETE, data.encode())
+        SendPacket.send_packet(self.client, packet)
+
+    def create(self, path, filename):
+        print('sending')
+        data = f'{{"path": "{path}", "filename": "{filename}"}}'
+        packet = Packet(PacketType.CREATE, data.encode())
+        SendPacket.send_packet(self.client, packet)
+
+    def open(self, path):
+        print('sending')
+        data = f'{{"path": "{path}"}}'
+        packet = Packet(PacketType.OPEN, data.encode())
+        SendPacket.send_packet(self.client, packet)
 
     def receive(self):
         while True:

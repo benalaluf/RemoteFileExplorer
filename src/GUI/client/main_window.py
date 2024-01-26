@@ -49,13 +49,5 @@ class ClientGUI(QMainWindow):
     def closeEvent(self, event):
         exit(0)
 
-    def open_file_dialog(self):
-        popup = FileManagerWidget(self)
-        result = popup.exec_()
 
-        if result == QDialog.Accepted:
-            value = popup.get_result()
-            print("Value from pop-up window:", value)
-            return value
-        return None
 

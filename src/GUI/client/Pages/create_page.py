@@ -45,12 +45,12 @@ class CreatePage(QWidget):
 
         layout.addLayout(new_text_layout)
 
-        self.copy_button = QPushButton("Create")
-        self.copy_button.clicked.connect(self.create)
-        self.copy_button.clicked.connect(self.set_new_name)
+        self.create_button = QPushButton("Create")
+        self.create_button.clicked.connect(self.create)
+        self.create_button.clicked.connect(self.set_new_name)
 
 
-        layout.addWidget(self.copy_button)
+        layout.addWidget(self.create_button)
 
 
     def set_src_path(self):
