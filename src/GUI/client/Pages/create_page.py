@@ -1,70 +1,74 @@
+import os
+
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QLineEdit
 
-from src.GUI.client.Pages.file_dialog import open_file_dialog
+from src.GUI.file_dialog import open_file_dialog
 
 
 class CreatePage(QWidget):
     def __init__(self, parent):
         super().__init__()
         self.parent = parent
-        self.initUI()
+        self.setup_ui()
 
         self.src_path = ''
         self.new_name = ''
 
-    def initUI(self):
-        layout = QVBoxLayout()
-        layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.setLayout(layout)
+    def setup_ui(self):
+        layout = QVBoxLayout(self)
+        layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
-        title_label = QLabel("Create")
+        title_label = QLabel("RemoteFileExplorer")
         title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        title_label.setStyleSheet("font-size: 36px;")
+        title_label.setStyleSheet("font-size: 36px; font-weight: bold;")
         layout.addWidget(title_label)
 
-        layout.addSpacing(150)
+        layout.addSpacing(60)
 
         src_layout = QHBoxLayout()
-        self.src_lable = QLabel("src:")
-        self.src_lable_path = QLabel("None")
+        self.src_label = QLabel("Source:")
+        self.src_label_path = QLabel("None")
         self.src_button = QPushButton("Choose")
         self.src_button.clicked.connect(self.set_src_path)
-        src_layout.addWidget(self.src_lable)
-        src_layout.addWidget(self.src_lable_path)
+
+        src_layout.addWidget(self.src_label)
+        src_layout.addWidget(self.src_label_path)
         src_layout.addWidget(self.src_button)
 
         layout.addLayout(src_layout)
 
         new_text_layout = QHBoxLayout()
-        self.new_name_lable = QLabel("Enter the name of the item:")
+        self.new_name_label = QLabel("Enter the name of the item:")
         self.new_name_text = QLineEdit()
         self.new_name_text.setPlaceholderText("write file name")
-        new_text_layout.addWidget(self.new_name_lable)
+        new_text_layout.addWidget(self.new_name_label)
         new_text_layout.addWidget(self.new_name_text)
 
         layout.addLayout(new_text_layout)
+        layout.addSpacing(30)
 
         self.create_button = QPushButton("Create")
         self.create_button.clicked.connect(self.create)
-        self.create_button.clicked.connect(self.set_new_name)
-
+        self.create_button.setStyleSheet(
+            "height: 40px; background-color: #007ACC; color: white; font-weight: bold; font-size: 18px;border-radius: 20px;"
+        )
 
         layout.addWidget(self.create_button)
 
+        self.back_button = QPushButton("Back")
+        self.back_button.clicked.connect(self.parent.show_menu_page)
+        self.back_button.setStyleSheet(
+            "height: 40px; background-color: #007ACC; color: white; font-weight: bold; font-size: 18px;border-radius: 20px;"
+        )
+
+        layout.addWidget(self.back_button)
 
     def set_src_path(self):
         self.src_path = open_file_dialog()
-        print(self.src_path)
-        self.src_lable_path.setText(self.src_path)
-
-    def set_new_name(self):
-        self.new_name = self.new_name_text.text()
-        print(self.new_name)
-        
+        self.src_label_path.setText(self.src_path)
 
     def create(self):
-        print(f"create {self.new_name}")
+        print(f"Creating {self.new_name_text.text()} at {self.src_path}")
+        os.mkdir(os.path.join(self.src_path,self.new_name_text.text()))
         self.parent.show_menu_page()
-
-

@@ -72,6 +72,7 @@ class FileManagerWidget(QDialog):
                     good_item.setFont(QFont('Helvetica', 14))
                     if os.path.isfile(f'{path}/{item}'):
                         pass
+                        # good_item.setForeground(QColor("white"))
                     else:
                         good_item.setForeground(QColor("#007ACC"))
                     self.file_list.addItem(good_item)
@@ -89,7 +90,7 @@ class FileManagerWidget(QDialog):
         if os.path.isdir(f'{self.current_dir}/{current}'):
             self.cd(f'{self.current_dir}/{current}')
         else:
-            self.current_path = os.path.normpath(f'{self.current_dir}/{current}').replace("/", "//")
+            self.current_path = os.path.abspath(f'{self.current_dir}/{current}')
             self.path_label.setText(self.current_path)
         print(self.current_path)
 

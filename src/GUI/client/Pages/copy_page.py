@@ -1,7 +1,10 @@
+import shutil
 import sys
+
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QApplication, QHBoxLayout
-from src.GUI.client.Pages.file_dialog import open_file_dialog
+
+from src.GUI.file_dialog import open_file_dialog
 
 
 class CopyPage(QWidget):
@@ -56,6 +59,14 @@ class CopyPage(QWidget):
 
         layout.addWidget(self.copy_button)
 
+        self.back_button = QPushButton("Back")
+        self.back_button.clicked.connect(self.parent.show_menu_page)
+        self.back_button.setStyleSheet(
+            "height: 40px; background-color: #007ACC; color: white; font-weight: bold; font-size: 18px;border-radius: 20px;"
+        )
+
+        layout.addWidget(self.back_button)
+
     def set_src_path(self):
         self.src_path = open_file_dialog()
         self.src_label_path.setText(self.src_path)
@@ -66,7 +77,7 @@ class CopyPage(QWidget):
 
     def copy(self):
         print(f"Copying {self.src_path} to {self.dst_path}")
-        # Implement your copy logic here
+        shutil.copy(self.src_path,  self.dst_path)
         self.parent.show_menu_page()
 
 

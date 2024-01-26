@@ -5,7 +5,8 @@ from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import QApplication
 
 from src.Conn.client_conn import ClientConn
-from src.GUI.client.main_window import ClientGUI
+from src.GUI.main_window import ClientGUI
+
 from src.Protocol.protocol import Packet, PacketType
 import threading
 

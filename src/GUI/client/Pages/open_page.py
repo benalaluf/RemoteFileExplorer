@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayo
 from src.GUI.file_dialog import open_file_dialog
 
 
-class DeletePage(QWidget):
+class OpenPage(QWidget):
     def __init__(self, parent):
         super().__init__()
         self.parent = parent
@@ -38,13 +38,13 @@ class DeletePage(QWidget):
         layout.addLayout(src_layout)
         layout.addSpacing(30)
 
-        self.delete_button = QPushButton("Delete")
-        self.delete_button.clicked.connect(self.delete)
-        self.delete_button.setStyleSheet(
+        self.open_button = QPushButton("Open")
+        self.open_button.clicked.connect(self.open)
+        self.open_button.setStyleSheet(
             "height: 40px; background-color: #007ACC; color: white; font-weight: bold; font-size: 18px;border-radius: 20px;"
         )
 
-        layout.addWidget(self.delete_button)
+        layout.addWidget(self.open_button)
 
         self.back_button = QPushButton("Back")
         self.back_button.clicked.connect(self.parent.show_menu_page)
@@ -58,7 +58,7 @@ class DeletePage(QWidget):
         self.src_path = open_file_dialog()
         self.src_label_path.setText(self.src_path)
 
-    def delete(self):
-        print(f"Deleting {self.src_path}")
-        os.remove(self.src_path)
+    def open(self):
+        print(f"Opening {self.src_path}")
+        os.startfile(self.src_path)
         self.parent.show_menu_page()
