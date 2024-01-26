@@ -1,7 +1,7 @@
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QDialog
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout
 
-from src.Client.GUI.Pages.file_dialog import FileManagerWidget, open_file_dialog
+from src.GUI.client.Pages.file_dialog import open_file_dialog
 
 
 class DeletePage(QWidget):

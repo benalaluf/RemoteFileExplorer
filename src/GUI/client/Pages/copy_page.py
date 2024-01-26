@@ -1,8 +1,7 @@
 import sys
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QPalette, QBrush, QPixmap
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QApplication, QHBoxLayout
-from src.Client.GUI.Pages.file_dialog import FileManagerWidget, open_file_dialog
+from src.GUI.client.Pages.file_dialog import open_file_dialog
 
 
 class CopyPage(QWidget):
