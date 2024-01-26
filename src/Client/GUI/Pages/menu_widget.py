@@ -1,7 +1,6 @@
 import sys
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QPalette, QBrush, QPixmap
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QApplication
 
 
@@ -36,7 +35,7 @@ class MainMenuPage(QWidget):
             "height: 40px; background-color: #007ACC; color: white; font-weight: bold; font-size: 18px;border-radius: 20px;"
         )
         self.open_button = QPushButton("Open")
-        # self.open_button.clicked.connect(self.parent.show_login)
+        self.open_button.clicked.connect(self.parent.show_open_page)
         self.open_button.setFixedHeight(80)
         self.open_button.setStyleSheet(
             "height: 40px; background-color: #007ACC; color: white; font-weight: bold; font-size: 18px;border-radius: 20px;"
@@ -48,15 +47,12 @@ class MainMenuPage(QWidget):
             "height: 40px; background-color: #007ACC; color: white; font-weight: bold; font-size: 18px;border-radius: 20px;"
         )
 
-
-
         button_layout.addWidget(self.copy_button)
         button_layout.addWidget(self.delete_button)
         button_layout.addWidget(self.open_button)
         button_layout.addWidget(self.create_button)
 
         layout.addLayout(button_layout)
-
 
 
 if __name__ == "__main__":

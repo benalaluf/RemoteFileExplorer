@@ -71,7 +71,8 @@ class FileManagerWidget(QDialog):
                     good_item = QListWidgetItem(item)
                     good_item.setFont(QFont('Helvetica', 14))
                     if os.path.isfile(f'{path}/{item}'):
-                        good_item.setForeground(QColor("white"))
+                        pass
+                        # good_item.setForeground(QColor("white"))
                     else:
                         good_item.setForeground(QColor("#007ACC"))
                     self.file_list.addItem(good_item)
