@@ -1,3 +1,5 @@
+import os
+
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QLineEdit
 
@@ -68,5 +70,5 @@ class CreatePage(QWidget):
 
     def create(self):
         print(f"Creating {self.new_name_text.text()} at {self.src_path}")
-        # Implement your create logic here
+        os.mkdir(os.path.join(self.src_path,self.new_name_text.text()))
         self.parent.show_menu_page()

@@ -1,3 +1,5 @@
+import os
+
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout
 
@@ -58,5 +60,5 @@ class DeletePage(QWidget):
 
     def delete(self):
         print(f"Deleting {self.src_path}")
-        # Implement your delete logic here
+        os.remove(self.src_path)
         self.parent.show_menu_page()

@@ -1,3 +1,4 @@
+import shutil
 import sys
 
 from PyQt5.QtCore import Qt
@@ -76,7 +77,7 @@ class CopyPage(QWidget):
 
     def copy(self):
         print(f"Copying {self.src_path} to {self.dst_path}")
-        # Implement your copy logic here
+        shutil.copy(self.src_path,  self.dst_path)
         self.parent.show_menu_page()
 
 

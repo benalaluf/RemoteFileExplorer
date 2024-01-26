@@ -1,3 +1,5 @@
+import os
+
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout
 
@@ -58,5 +60,5 @@ class OpenPage(QWidget):
 
     def open(self):
         print(f"Opening {self.src_path}")
-        # Implement your open logic here
+        os.startfile(self.src_path)
         self.parent.show_menu_page()
