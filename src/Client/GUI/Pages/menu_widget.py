@@ -15,7 +15,7 @@ class MainMenuPage(QWidget):
         layout = QVBoxLayout(self)
         layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
-        title_label = QLabel("ChatRoom")
+        title_label = QLabel("RemoteFileExplorer")
         title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         title_label.setStyleSheet("font-size: 36px; font-weight: bold;")
         layout.addWidget(title_label)
@@ -42,7 +42,7 @@ class MainMenuPage(QWidget):
             "height: 40px; background-color: #007ACC; color: white; font-weight: bold; font-size: 18px;border-radius: 20px;"
         )
         self.create_button = QPushButton("Create")
-        # self.create_button.clicked.connect(self.parent.show_login)
+        self.create_button.clicked.connect(self.parent.show_create_page)
         self.create_button.setFixedHeight(80)
         self.create_button.setStyleSheet(
             "height: 40px; background-color: #007ACC; color: white; font-weight: bold; font-size: 18px;border-radius: 20px;"

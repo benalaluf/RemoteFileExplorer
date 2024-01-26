@@ -18,7 +18,7 @@ class ClientGUI(QMainWindow):
 
     def init_gui(self):
         self.setWindowTitle("ChatRoom")
-        self.setGeometry(100, 100, 600, 800)
+        self.setGeometry(100, 100, 600, 600)
 
         central_widget = QWidget(self)
         self.setCentralWidget(central_widget)

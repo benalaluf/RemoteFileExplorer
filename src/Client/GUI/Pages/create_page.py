@@ -1,6 +1,7 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QDialog, QLineEdit
-from file_dialog import FileManagerWidget
+
+from src.Client.GUI.Pages.file_dialog import open_file_dialog
 
 
 class CreatePage(QWidget):
@@ -53,7 +54,7 @@ class CreatePage(QWidget):
 
 
     def set_src_path(self):
-        self.src_path = self.open_file_dialog()
+        self.src_path = open_file_dialog()
         print(self.src_path)
         self.src_lable_path.setText(self.src_path)
 
@@ -66,14 +67,4 @@ class CreatePage(QWidget):
         print(f"create {self.new_name}")
         self.parent.show_menu_page()
 
-
-    def open_file_dialog(self):
-        popup = FileManagerWidget(self)
-        result = popup.exec_()
-
-        if result == QDialog.Accepted:
-            value = popup.get_result()
-            # print("Value from pop-up window:", value)
-            return value
-        return None
 

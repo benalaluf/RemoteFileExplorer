@@ -1,10 +1,15 @@
 import os
-import sys
-
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QColor, QFont
-from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QPushButton, QLineEdit, QListWidget, QFileDialog, \
-    QWidget, QListWidgetItem, QColorDialog, QLabel, QDialog
+from PyQt5.QtWidgets import (
+    QApplication,
+    QDialog,
+    QVBoxLayout,
+    QPushButton,
+    QListWidget,
+    QListWidgetItem,
+    QLabel,
+)
 
 
 class FileManagerWidget(QDialog):
@@ -12,9 +17,9 @@ class FileManagerWidget(QDialog):
         super(FileManagerWidget, self).__init__()
 
         self.setWindowTitle('File Manager')
-        self.setGeometry(100, 100, 500, 400)
-        self.current_path = "c:\\"
-        self.current_dir = "c:\\"
+        self.setGeometry(100, 100, 600, 400)
+        self.current_path = os.path.expanduser("~")
+        self.current_dir = os.path.expanduser("~")
 
         self.initUI()
 
@@ -24,18 +29,27 @@ class FileManagerWidget(QDialog):
         self.path_label = QLabel('', self)
         self.path_label.setFont(QFont('Helvetica', 14))
         self.path_label.setAlignment(Qt.AlignCenter)
-        self.path_label.adjustSize()
         layout.addWidget(self.path_label)
 
         self.file_list = QListWidget(self)
+        self.file_list.setStyleSheet(
+            "QListWidget {border: 2cpx; }"
+            "QListWidget::item { padding: 5px; }"
+            "QListWidget::item:selected { background-color: #007ACC;  }"
+        )
         self.clear_view()
         self.file_list.itemClicked.connect(self.update_view)
         layout.addWidget(self.file_list)
 
-        button = QPushButton('ok', self)
-        button.clicked.connect(self.accept_and_close)
-        layout.addWidget(button)
-        # self.setCentralWidget(central_widget)
+        button_layout = QVBoxLayout()
+        ok_button = QPushButton('OK', self)
+        ok_button.clicked.connect(self.accept_and_close)
+        ok_button.setStyleSheet(
+            "QPushButton { background-color: #007ACC; color: white; padding: 8px; border-radius: 5px; font-size: 14px; }"
+            "QPushButton:hover { background-color: #005D99; }"
+        )
+        button_layout.addWidget(ok_button)
+        layout.addLayout(button_layout)
 
         self.cd(self.current_path)
 
@@ -55,10 +69,11 @@ class FileManagerWidget(QDialog):
                 self.clear_view()
                 for item in os.listdir(path):
                     good_item = QListWidgetItem(item)
-                    if os.path.isfile(f'{path}\\{item}'):
-                        good_item.setForeground(QColor("red"))
+                    good_item.setFont(QFont('Helvetica', 14))
+                    if os.path.isfile(f'{path}/{item}'):
+                        good_item.setForeground(QColor("white"))
                     else:
-                        good_item.setForeground(QColor("blue"))
+                        good_item.setForeground(QColor("#007ACC"))
                     self.file_list.addItem(good_item)
 
                 self.current_dir = os.path.abspath(path)
@@ -71,13 +86,13 @@ class FileManagerWidget(QDialog):
     def update_view(self, item):
         current = item.text()
 
-        if os.path.isdir(f'{self.current_dir}\\{current}'):
-            self.cd(f'{self.current_dir}\\{current}')
+        if os.path.isdir(f'{self.current_dir}/{current}'):
+            self.cd(f'{self.current_dir}/{current}')
         else:
-
-            self.current_path = os.path.abspath(f'{self.current_dir}\\{current}')
+            self.current_path = os.path.abspath(f'{self.current_dir}/{current}')
             self.path_label.setText(self.current_path)
         print(self.current_path)
+
 
 def open_file_dialog():
     popup = FileManagerWidget()
@@ -85,7 +100,12 @@ def open_file_dialog():
 
     if result == QDialog.Accepted:
         value = popup.get_result()
-        # print("Value from pop-up window:", value)
         return value
     return None
 
+
+if __name__ == "__main__":
+    app = QApplication([])
+    file_manager = FileManagerWidget()
+    file_manager.show()
+    app.exec_()
