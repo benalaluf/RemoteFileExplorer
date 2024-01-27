@@ -6,7 +6,7 @@ import shutil
 import socket
 import threading
 
-from src.Protocol.protocol import HandelPacket, PacketType, Packet
+from src.Protocol.protocol import HandelPacket, PacketType, Packet, SendPacket
 
 
 class ServerClientData:
@@ -28,15 +28,15 @@ class ServerConn:
         print(f'Listening... {self.addr}')
         while True:
             conn, addr = self.server.accept()
-            print("got connectoin ",addr)
+            print("got connectoin ", addr)
             threading.Thread(target=self.handel_client, args=(conn,)).start()
 
     def handel_client(self, conn):
         while True:
             packet = HandelPacket.recv_packet(conn)
-            self.handel_packet(packet)
+            self.handel_packet(packet, conn)
 
-    def handel_packet(self, packet: Packet):
+    def handel_packet(self, packet: Packet, conn):
         print(packet.payload.decode())
         if packet.packet_type == PacketType.COPY:
             self.handle_copy(packet)
@@ -47,14 +47,13 @@ class ServerConn:
         if packet.packet_type == PacketType.OPEN:
             self.handle_open(packet)
         if packet.packet_type == PacketType.LSDIR:
-            self.handle_lsdir(packet)
+            self.handle_lsdir(packet, conn)
 
     def handle_copy(self, packet):
-        json_issue = packet.payload.decode().replace("\\","\\\\")
+        json_issue = packet.payload.decode().replace("\\", "\\\\")
         packet_data = json.loads(json_issue)
-        print('copying',packet_data.get('src'), packet_data.get('dst'))
+        print('copying', packet_data.get('src'), packet_data.get('dst'))
         # shutil.copy(packet_data.get('src'), packet_data.get('dst'))
-
 
     def handle_delete(self, packet):
         packet_data = json.load(packet.payload)
@@ -63,7 +62,7 @@ class ServerConn:
 
     def handle_create(self, packet):
         packet_data = json.loads(packet.payload)
-        print('creating',packet_data['path'], packet_data['filename'])
+        print('creating', packet_data['path'], packet_data['filename'])
         # os.mkdir(packet_data['path'], packet_data['filename'])
 
     def handle_open(self, packet):
@@ -71,5 +70,28 @@ class ServerConn:
         print(packet_data['path'])
         # os.startfile(packet_data['path'])
 
-    def handle_lsdir(self, packet):
-        pass
+    def handle_lsdir(self, packet, conn):
+        data = json.loads(packet.payload)
+        path = data.get('path')
+        dirs = []
+        files = []
+        print(path)
+        if os.path.isdir(path):
+            isFile = False
+            for itemm in os.listdir(path):
+                if os.path.isdir(os.path.join(path,itemm)):
+                    dirs.append(itemm)
+                else:
+                    files.append(itemm)
+        else:
+            isFile = True
+
+        data_to_send = {
+            "isfile": isFile,
+            "path": path,
+            "dirs": dirs,
+            "files": files
+        }
+        respons = json.dumps(data_to_send)
+        packet = Packet(PacketType.LSDIR, respons.encode())
+        SendPacket.send_packet(conn, packet)

@@ -3,7 +3,6 @@ import os
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QLineEdit
 
-from src.GUI.file_dialog import open_file_dialog
 
 
 class CreatePage(QWidget):
@@ -65,7 +64,7 @@ class CreatePage(QWidget):
         layout.addWidget(self.back_button)
 
     def set_src_path(self):
-        self.src_path = open_file_dialog()
+        self.src_path = self.parent.open_file_dialog()
         self.src_label_path.setText(self.src_path)
 
     def create(self):

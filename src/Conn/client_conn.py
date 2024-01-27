@@ -63,6 +63,12 @@ class ClientConn:
                 break
         self.client.close()
 
+    def lsdir(self, path):
+        data = f'{{"path": "{path}"}}'
+        packet = Packet(PacketType.LSDIR, data.encode())
+        SendPacket.send_packet(self.client,packet)
+        print("sending ",data)
+
     def handle_packet(self, packet: Packet):
         if self.handle_packet_expansion:
             self.handle_packet_expansion(packet)

@@ -13,14 +13,14 @@ from PyQt5.QtWidgets import (
 
 
 class FileManagerWidget(QDialog):
-    def __init__(self):
+    def __init__(self, parent):
         super(FileManagerWidget, self).__init__()
 
         self.setWindowTitle('File Manager')
         self.setGeometry(100, 100, 600, 400)
         self.current_path = os.path.expanduser("~")
         self.current_dir = os.path.expanduser("~")
-
+        self.parent = parent
         self.initUI()
 
     def initUI(self):
@@ -38,7 +38,7 @@ class FileManagerWidget(QDialog):
             "QListWidget::item:selected { background-color: #007ACC;  }"
         )
         self.clear_view()
-        self.file_list.itemClicked.connect(self.update_view)
+        self.file_list.itemClicked.connect(self.parent.get_lsdir)
         layout.addWidget(self.file_list)
 
         button_layout = QVBoxLayout()
@@ -51,7 +51,6 @@ class FileManagerWidget(QDialog):
         button_layout.addWidget(ok_button)
         layout.addLayout(button_layout)
 
-        self.cd(self.current_path)
 
     def clear_view(self):
         self.file_list.clear()
@@ -63,46 +62,26 @@ class FileManagerWidget(QDialog):
     def accept_and_close(self):
         self.accept()
 
-    def cd(self, path):
-        try:
-            if os.path.isdir(path):
-                self.clear_view()
-                for item in os.listdir(path):
-                    good_item = QListWidgetItem(item)
-                    good_item.setFont(QFont('Helvetica', 14))
-                    if os.path.isfile(f'{path}/{item}'):
-                        pass
-                        # good_item.setForeground(QColor("white"))
-                    else:
-                        good_item.setForeground(QColor("#007ACC"))
-                    self.file_list.addItem(good_item)
+    def update_ls_dir(self, is_file, path, dirs, files):
+        self.clear_view()
+        if not is_file:
+            for dir in dirs:
+                good_item = QListWidgetItem(dir)
+                good_item.setFont(QFont('Helvetica', 14))
+                good_item.setForeground(QColor("#007ACC"))
+                self.file_list.addItem(good_item)
 
-                self.current_dir = os.path.abspath(path)
-
-                self.path_label.setText(self.current_dir)
-                self.current_path = self.current_dir
-        except Exception as e:
-            print(e)
-
-    def update_view(self, item):
-        current = item.text()
-
-        if os.path.isdir(f'{self.current_dir}/{current}'):
-            self.cd(f'{self.current_dir}/{current}')
+            for file in files:
+                good_item = QListWidgetItem(file)
+                good_item.setFont(QFont('Helvetica', 14))
+                self.file_list.addItem(good_item)
+            self.current_dir = os.path.abspath(path).replace("\\","\\\\")
+            self.path_label.setText(self.current_dir)
+            self.current_path = self.current_dir
         else:
-            self.current_path = os.path.abspath(f'{self.current_dir}/{current}')
+            self.current_path = path
             self.path_label.setText(self.current_path)
-        print(self.current_path)
 
-
-def open_file_dialog():
-    popup = FileManagerWidget()
-    result = popup.exec_()
-
-    if result == QDialog.Accepted:
-        value = popup.get_result()
-        return value
-    return None
 
 
 if __name__ == "__main__":

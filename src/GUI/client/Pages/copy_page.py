@@ -4,8 +4,6 @@ import sys
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QApplication, QHBoxLayout
 
-from src.GUI.file_dialog import open_file_dialog
-
 
 class CopyPage(QWidget):
     def __init__(self, parent):
@@ -68,11 +66,11 @@ class CopyPage(QWidget):
         layout.addWidget(self.back_button)
 
     def set_src_path(self):
-        self.src_path = open_file_dialog()
+        self.src_path = self.parent.open_file_dialog()
         self.src_label_path.setText(self.src_path)
 
     def set_dst_path(self):
-        self.dst_path = open_file_dialog()
+        self.dst_path = self.parent.open_file_dialog()
         self.dst_label_path.setText(self.dst_path)
 
     def copy(self):
