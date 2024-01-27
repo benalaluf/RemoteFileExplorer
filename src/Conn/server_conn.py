@@ -57,12 +57,12 @@ class ServerConn:
     def handle_delete(self, packet):
         packet_data = json.loads(packet.payload.decode())
         print('deleting', packet_data.get('path'))
-        os.remove(packet_data.path)
+        os.remove(packet_data.get('path'))
 
     def handle_create(self, packet):
         packet_data = json.loads(packet.payload.decode())
         print('creating', packet_data['path'], packet_data['filename'])
-        os.mkdir(packet_data['path'], packet_data['filename'])
+        os.mkdir(packet_data['path']+"\\"+packet_data['filename'])
 
     def handle_open(self, packet, conn):
         packet_data = json.loads(packet.payload.decode())

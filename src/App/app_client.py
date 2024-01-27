@@ -68,10 +68,11 @@ class ClientApp:
         self.client_conn.delete(path)
 
     def _create(self):
-        path = self.client_gui.create_page.src_lable_path.text()
+        path = self.client_gui.create_page.src_label_path.text()
         file_name = self.client_gui.create_page.new_name_text.text()
         self.client_conn.create(path, file_name)
-        pass
+        self.client_gui.show_menu_page()
+
 
     def lsdir(self, packet):
         data = json.loads(packet.payload.decode())
