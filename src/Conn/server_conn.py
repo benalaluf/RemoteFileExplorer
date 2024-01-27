@@ -9,8 +9,7 @@ import threading
 from src.Protocol.protocol import HandelPacket, PacketType, Packet, SendPacket
 
 
-class ServerClientData:
-    pass
+import base64
 
 
 class ServerConn:
@@ -37,7 +36,7 @@ class ServerConn:
             self.handel_packet(packet, conn)
 
     def handel_packet(self, packet: Packet, conn):
-        print(packet.payload.decode())
+        # print(packet.payload.decode())
         if packet.packet_type == PacketType.COPY:
             self.handle_copy(packet)
         if packet.packet_type == PacketType.DELETE:
@@ -56,28 +55,31 @@ class ServerConn:
         shutil.copy(packet_data.get('src'), packet_data.get('dst'))
 
     def handle_delete(self, packet):
-        packet_data = json.load(packet.payload)
+        packet_data = json.loads(packet.payload.decode())
         print('deleting', packet_data.get('path'))
         os.remove(packet_data.path)
 
     def handle_create(self, packet):
-        packet_data = json.loads(packet.payload)
+        packet_data = json.loads(packet.payload.decode())
         print('creating', packet_data['path'], packet_data['filename'])
         os.mkdir(packet_data['path'], packet_data['filename'])
 
-    def handle_open(self, packet,conn):
-        packet_data = json.loads(packet.payload)
+    def handle_open(self, packet, conn):
+        packet_data = json.loads(packet.payload.decode())
         path = packet_data['path']
+        print(path)
+        path= os.path.abspath(path)
         print(path)
         with open(path, "rb") as f:
             data = f.read()
+        encoded_content = base64.b64encode(data).decode()
         respones = {
             "filename": path.split("\\")[-1],
-            "filedata": data
+            "filedata": encoded_content
         }
         packet_data = json.dumps(respones).encode()
-        # os.startfile(packet_data['path'])
         SendPacket.send_packet(conn, Packet(PacketType.OPEN,packet_data))
+
 
     def handle_lsdir(self, packet, conn):
         data = json.loads(packet.payload)
@@ -85,22 +87,25 @@ class ServerConn:
         dirs = []
         files = []
         print(path)
-        if os.path.isdir(path):
-            isFile = False
-            for itemm in os.listdir(path):
-                if os.path.isdir(os.path.join(path,itemm)):
-                    dirs.append(itemm)
-                else:
-                    files.append(itemm)
-        else:
-            isFile = True
+        try:
+            if os.path.isdir(path):
+                isFile = False
+                for itemm in os.listdir(path):
+                    if os.path.isdir(os.path.join(path,itemm)):
+                        dirs.append(itemm)
+                    else:
+                        files.append(itemm)
+            else:
+                isFile = True
 
-        data_to_send = {
-            "isfile": isFile,
-            "path": path,
-            "dirs": dirs,
-            "files": files
-        }
-        respons = json.dumps(data_to_send)
-        packet = Packet(PacketType.LSDIR, respons.encode())
-        SendPacket.send_packet(conn, packet)
+            data_to_send = {
+                "isfile": isFile,
+                "path": path,
+                "dirs": dirs,
+                "files": files
+            }
+            respons = json.dumps(data_to_send)
+            packet = Packet(PacketType.LSDIR, respons.encode())
+            SendPacket.send_packet(conn, packet)
+        except Exception as e:
+            print(e)

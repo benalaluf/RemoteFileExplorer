@@ -37,7 +37,7 @@ class OpenPage(QWidget):
         layout.addSpacing(30)
 
         self.open_button = QPushButton("Open")
-        self.open_button.clicked.connect(self.open)
+        # self.open_button.clicked.connect(self.open)
         self.open_button.setStyleSheet(
             "height: 40px; background-color: #007ACC; color: white; font-weight: bold; font-size: 18px;border-radius: 20px;"
         )
@@ -57,6 +57,4 @@ class OpenPage(QWidget):
         self.src_label_path.setText(self.src_path)
 
     def open(self):
-        print(f"Opening {self.src_path}")
-        os.startfile(self.src_path)
         self.parent.show_menu_page()

@@ -79,7 +79,7 @@ class FileManagerWidget(QDialog):
             self.path_label.setText(self.current_dir)
             self.current_path = self.current_dir
         else:
-            self.current_path = path
+            self.current_path = os.path.abspath(path).replace("\\","\\\\")
             self.path_label.setText(self.current_path)
 
 

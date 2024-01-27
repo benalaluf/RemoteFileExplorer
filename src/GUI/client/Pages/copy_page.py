@@ -50,7 +50,7 @@ class CopyPage(QWidget):
         layout.addSpacing(30)
 
         self.copy_button = QPushButton("Copy")
-        self.copy_button.clicked.connect(self.copy)
+        # self.copy_button.clicked.connect(self.parent.show_menu_page)
         self.copy_button.setStyleSheet(
             "height: 40px; background-color: #007ACC; color: white; font-weight: bold; font-size: 18px;border-radius: 20px;"
         )
@@ -58,7 +58,7 @@ class CopyPage(QWidget):
         layout.addWidget(self.copy_button)
 
         self.back_button = QPushButton("Back")
-        self.back_button.clicked.connect(self.parent.show_menu_page)
+        # self.back_button.clicked.connect(self.parent.show_menu_page)
         self.back_button.setStyleSheet(
             "height: 40px; background-color: #007ACC; color: white; font-weight: bold; font-size: 18px;border-radius: 20px;"
         )

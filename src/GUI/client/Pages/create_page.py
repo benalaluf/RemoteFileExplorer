@@ -48,7 +48,7 @@ class CreatePage(QWidget):
         layout.addSpacing(30)
 
         self.create_button = QPushButton("Create")
-        self.create_button.clicked.connect(self.create)
+        # self.create_button.clicked.connect(self.create)
         self.create_button.setStyleSheet(
             "height: 40px; background-color: #007ACC; color: white; font-weight: bold; font-size: 18px;border-radius: 20px;"
         )
