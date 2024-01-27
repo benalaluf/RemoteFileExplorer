@@ -18,8 +18,8 @@ class FileManagerWidget(QDialog):
 
         self.setWindowTitle('File Manager')
         self.setGeometry(100, 100, 600, 400)
-        self.current_path = os.path.expanduser("~")
-        self.current_dir = os.path.expanduser("~")
+        self.current_path = "C://Users"
+        self.current_dir = "C://Users"
         self.parent = parent
         self.initUI()
 

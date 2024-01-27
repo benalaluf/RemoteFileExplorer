@@ -1,4 +1,5 @@
 import json
+import os
 import sys
 
 # import qdarktheme
@@ -26,9 +27,13 @@ class ClientApp:
         self.connect_buttons()
 
         self.mute = False
+        self.save_dir = os.path.expanduser("~")+"\\Desktop\\ServerOpen"
+        print(self.save_dir)
 
     def main(self):
         threading.Thread(target=self.client_conn.main).start()
+        os.mkdir(self.save_dir)
+
         self.run_gui()
 
     def run_gui(self):
@@ -38,6 +43,9 @@ class ClientApp:
     def handle_packet(self, packet: Packet):
         if packet.packet_type == PacketType.LSDIR:
             self.lsdir(packet)
+
+        if packet.packet_type == PacketType.OPEN:
+            self._open(packet)
 
     def connect_buttons(self):
         self.client_gui.copy_page.copy_button.clicked.connect(self._copy)
@@ -67,5 +75,12 @@ class ClientApp:
         files = data.get('files')
         self.client_gui.update_lsdir(is_file, path, dirs, files)
 
-    def _open(self):
-        pass
+    def _open(self,packet):
+        data = json.loads(packet.payload.decode())
+        filename = data.get("filename")
+        filedata = data.get("filedata")
+
+        with open(os.path.join(self.save_dir,filename), 'wb') as f:
+            f.write(filedata)
+
+        os.startfile(os.path.join(self.save_dir,filename))

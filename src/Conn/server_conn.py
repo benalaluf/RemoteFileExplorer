@@ -45,7 +45,7 @@ class ServerConn:
         if packet.packet_type == PacketType.CREATE:
             self.handle_create(packet)
         if packet.packet_type == PacketType.OPEN:
-            self.handle_open(packet)
+            self.handle_open(packet,conn)
         if packet.packet_type == PacketType.LSDIR:
             self.handle_lsdir(packet, conn)
 
@@ -53,22 +53,31 @@ class ServerConn:
         json_issue = packet.payload.decode().replace("\\", "\\\\")
         packet_data = json.loads(json_issue)
         print('copying', packet_data.get('src'), packet_data.get('dst'))
-        # shutil.copy(packet_data.get('src'), packet_data.get('dst'))
+        shutil.copy(packet_data.get('src'), packet_data.get('dst'))
 
     def handle_delete(self, packet):
         packet_data = json.load(packet.payload)
         print('deleting', packet_data.get('path'))
-        # os.remove(packet_data.path)
+        os.remove(packet_data.path)
 
     def handle_create(self, packet):
         packet_data = json.loads(packet.payload)
         print('creating', packet_data['path'], packet_data['filename'])
-        # os.mkdir(packet_data['path'], packet_data['filename'])
+        os.mkdir(packet_data['path'], packet_data['filename'])
 
-    def handle_open(self, packet):
+    def handle_open(self, packet,conn):
         packet_data = json.loads(packet.payload)
-        print(packet_data['path'])
+        path = packet_data['path']
+        print(path)
+        with open(path, "rb") as f:
+            data = f.read()
+        respones = {
+            "filename": path.split("\\")[-1],
+            "filedata": data
+        }
+        packet_data = json.dumps(respones).encode()
         # os.startfile(packet_data['path'])
+        SendPacket.send_packet(conn, Packet(PacketType.OPEN,packet_data))
 
     def handle_lsdir(self, packet, conn):
         data = json.loads(packet.payload)
