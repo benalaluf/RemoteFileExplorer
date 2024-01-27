@@ -36,7 +36,6 @@ class ServerConn:
             self.handel_packet(packet, conn)
 
     def handel_packet(self, packet: Packet, conn):
-        # print(packet.payload.decode())
         if packet.packet_type == PacketType.COPY:
             self.handle_copy(packet)
         if packet.packet_type == PacketType.DELETE:
@@ -49,36 +48,48 @@ class ServerConn:
             self.handle_lsdir(packet, conn)
 
     def handle_copy(self, packet):
-        json_issue = packet.payload.decode().replace("\\", "\\\\")
-        packet_data = json.loads(json_issue)
-        print('copying', packet_data.get('src'), packet_data.get('dst'))
-        shutil.copy(packet_data.get('src'), packet_data.get('dst'))
+        try:
+            json_issue = packet.payload.decode().replace("\\", "\\\\")
+            packet_data = json.loads(json_issue)
+            print('copying', packet_data.get('src'), packet_data.get('dst'))
+            shutil.copy(packet_data.get('src'), packet_data.get('dst'))
+        except Exception as e:
+            print(e)
 
     def handle_delete(self, packet):
-        packet_data = json.loads(packet.payload.decode())
-        print('deleting', packet_data.get('path'))
-        os.remove(packet_data.get('path'))
+        try:
+            packet_data = json.loads(packet.payload.decode())
+            print('deleting', packet_data.get('path'))
+            os.remove(packet_data.get('path'))
+        except Exception as e:
+            print(e)
 
     def handle_create(self, packet):
-        packet_data = json.loads(packet.payload.decode())
-        print('creating', packet_data['path'], packet_data['filename'])
-        os.mkdir(packet_data['path']+"\\"+packet_data['filename'])
+        try:
+            packet_data = json.loads(packet.payload.decode())
+            print('creating', packet_data['path'], packet_data['filename'])
+            os.mkdir(packet_data['path']+"\\"+packet_data['filename'])
+        except Exception as e:
+            print(e)
 
     def handle_open(self, packet, conn):
-        packet_data = json.loads(packet.payload.decode())
-        path = packet_data['path']
-        print(path)
-        path= os.path.abspath(path)
-        print(path)
-        with open(path, "rb") as f:
-            data = f.read()
-        encoded_content = base64.b64encode(data).decode()
-        respones = {
-            "filename": path.split("\\")[-1],
-            "filedata": encoded_content
-        }
-        packet_data = json.dumps(respones).encode()
-        SendPacket.send_packet(conn, Packet(PacketType.OPEN,packet_data))
+        try:
+            packet_data = json.loads(packet.payload.decode())
+            path = packet_data['path']
+            print(path)
+            path= os.path.abspath(path)
+            print(path)
+            with open(path, "rb") as f:
+                data = f.read()
+            encoded_content = base64.b64encode(data).decode()
+            respones = {
+                "filename": path.split("\\")[-1],
+                "filedata": encoded_content
+            }
+            packet_data = json.dumps(respones).encode()
+            SendPacket.send_packet(conn, Packet(PacketType.OPEN,packet_data))
+        except Exception as e:
+            print(e)
 
 
     def handle_lsdir(self, packet, conn):

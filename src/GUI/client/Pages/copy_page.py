@@ -58,7 +58,6 @@ class CopyPage(QWidget):
         layout.addWidget(self.copy_button)
 
         self.back_button = QPushButton("Back")
-        # self.back_button.clicked.connect(self.parent.show_menu_page)
         self.back_button.setStyleSheet(
             "height: 40px; background-color: #007ACC; color: white; font-weight: bold; font-size: 18px;border-radius: 20px;"
         )
@@ -75,7 +74,7 @@ class CopyPage(QWidget):
 
     def copy(self):
         print(f"Copying {self.src_path} to {self.dst_path}")
-        shutil.copy(self.src_path,  self.dst_path)
+        shutil.copy(self.src_path, self.dst_path)
         self.parent.show_menu_page()
 
 

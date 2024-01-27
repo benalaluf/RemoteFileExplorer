@@ -38,7 +38,6 @@ class DeletePage(QWidget):
         layout.addSpacing(30)
 
         self.delete_button = QPushButton("Delete")
-        # self.delete_button.clicked.connect(self.delete)
         self.delete_button.setStyleSheet(
             "height: 40px; background-color: #007ACC; color: white; font-weight: bold; font-size: 18px;border-radius: 20px;"
         )
